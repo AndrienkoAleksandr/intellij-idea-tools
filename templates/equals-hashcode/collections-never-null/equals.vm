@@ -1,0 +1,41 @@
+@Override
+public boolean equals(Object obj) {
+    if (this == obj) {
+        return true;
+    }
+    if (!(obj instanceof ${class.name})) {
+        return false;
+    }
+    final ${class.name} that = (${class.name})obj;
+    return ##
+    #set($i = 0)
+    #set($size = $fields.size())
+    #foreach($field in $fields)
+        #if ($i != 0)
+            && ##
+        #end
+        #if ($field.primitive)
+            #if ($field.float)
+                Float.compare(${field.name}, that.${field.name}) == 0##
+            #elseif ($field.double)
+                Double.compare(${field.name}, that.${field.name}) == 0##
+            #else
+                ${field.name} == that.${field.name}##
+            #end
+        #elseif ($field.collection || $field.map)
+            ## collection getters are always start from 'get'
+            #set($getter = "get$field.name.substring(0, 1).toUpperCase()$field.name.substring(1)()")
+            ${getter}.equals(that.${getter})##
+        #elseif ($field.array)
+            java.util.Arrays.equals(${field.name}, that.${field.name})##
+        #else
+            java.util.Objects.equals(${field.name}, that.${field.name})##
+        #end
+        #if ($i != $size - 1)
+
+        #else
+            ;
+        #end
+        #set($i = $i + 1)
+    #end
+}
