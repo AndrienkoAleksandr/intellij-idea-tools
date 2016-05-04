@@ -8,10 +8,13 @@ public boolean equals(Object obj) {
     }
     final ${class.name} that = (${class.name})obj;
     return ##
+    #if ($superHasEquals)
+        super.equals(that)
+    #end
     #set($i = 0)
     #set($size = $fields.size())
     #foreach($field in $fields)
-        #if ($i != 0)
+        #if ($i != 0 || $superHasEquals)
             && ##
         #end
         #if ($field.primitive)

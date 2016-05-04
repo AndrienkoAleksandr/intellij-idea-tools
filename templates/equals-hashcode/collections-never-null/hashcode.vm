@@ -1,7 +1,9 @@
 @Override
 public int hashCode() {
     int hash = 7;
-    #set($i = 0)
+    #if ($superHasHashCode)
+        hash = 31 * hash + super.hashCode();
+    #end
     #set($size = $fields.size())
     #foreach($field in $fields)
     hash = 31 * hash + ##
